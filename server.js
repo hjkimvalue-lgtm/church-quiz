@@ -8,7 +8,20 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// HTML 파일은 캐시 금지, 나머지 정적 파일은 1시간 캐시
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
+
+// 배포 버전 확인용 (Railway 배포 여부 즉시 확인 가능)
+app.get('/version', (req, res) => res.json({ version: 'v3.0', time: new Date().toISOString() }));
 
 // ==================== 설정 ====================
 const TIME_LIMIT_MS = 30000;  // 문제당 30초
