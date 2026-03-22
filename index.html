@@ -66,79 +66,68 @@
     .verse { text-align:center; color:var(--textM); font-size:12px; font-style:italic; padding:14px 10px; border-top:1px solid rgba(201,168,76,0.2); margin-top:8px; line-height:1.7; }
 
     /* ══════════════════════════════════
-       QUIZ SCREEN
+       QUIZ SCREEN — 컴팩트 레이아웃
     ══════════════════════════════════ */
-    .progress-area { margin-bottom: 12px; }
-    .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+
+    /* 상단 바: 진행도 + 점수 */
+    .quiz-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
     .q-num { color:var(--wine); font-weight:700; font-size:13px; }
     .score-pill { background:linear-gradient(135deg,var(--wine),var(--wine2)); color:white; padding:4px 13px; border-radius:20px; font-size:13px; font-weight:700; }
-    .progress-bar { height:6px; background:rgba(107,26,46,0.1); border-radius:4px; overflow:hidden; }
+    .progress-bar { height:5px; background:rgba(107,26,46,0.1); border-radius:4px; overflow:hidden; margin-bottom:10px; }
     .progress-fill { height:100%; background:linear-gradient(90deg,var(--wine),var(--gold)); border-radius:4px; transition:width 0.5s ease; }
 
-    /* ── TIMER ── */
-    .timer-area {
-      display: flex; align-items: center; justify-content: center;
-      gap: 16px; margin-bottom: 14px;
+    /* 타이머 — 가로형 얇은 바 */
+    .timer-bar-wrap { margin-bottom:12px; }
+    .timer-bar-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+    .timer-label { font-size:12px; color:var(--textM); display:flex; align-items:center; gap:5px; }
+    .timer-secs { font-size:16px; font-weight:900; min-width:28px; text-align:right; transition:color 0.3s; }
+    .timer-track { height:10px; background:rgba(107,26,46,0.1); border-radius:5px; overflow:hidden; position:relative; }
+    .timer-fill { height:100%; border-radius:5px; transition:width 0.2s linear, background 0.4s ease; background:#43A047; }
+    .score-preview-row { display:flex; justify-content:flex-end; margin-top:4px; }
+    .score-preview-badge { background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.08)); border:1px solid rgba(201,168,76,0.35); border-radius:20px; padding:3px 12px; font-size:12px; color:var(--gold2); font-weight:700; }
+    .score-preview-badge span { font-size:16px; color:var(--gold); }
+
+    /* 문제 카드 — 입력창 포함 */
+    .question-card {
+      background:white; border-radius:18px;
+      box-shadow:0 4px 24px rgba(107,26,46,0.10);
+      border:1px solid rgba(201,168,76,0.18);
+      margin-bottom:12px; overflow:hidden;
     }
-    .timer-ring-wrap { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
-    .timer-ring { width: 72px; height: 72px; transform: rotate(-90deg); }
-    .timer-bg { fill: none; stroke: rgba(107,26,46,0.12); stroke-width: 7; }
-    .timer-arc { fill: none; stroke-width: 7; stroke-linecap: round;
-      stroke-dasharray: 195.0; /* 2π × 31 */
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 0.25s linear, stroke 0.5s ease;
+    .q-card-top { padding:18px 18px 14px; }
+    .q-badge { display:inline-block; background:linear-gradient(135deg,var(--wine),var(--wine2)); color:white; font-size:11px; font-weight:700; padding:3px 11px; border-radius:20px; margin-bottom:10px; }
+    .q-text { color:var(--text); font-size:17px; font-weight:700; line-height:1.6; }
+    .q-hint { margin-top:8px; font-size:12px; color:var(--textM); background:rgba(201,168,76,0.08); border-radius:7px; padding:7px 10px; border-left:3px solid var(--gold); }
+
+    /* 답 입력창 — 카드 하단에 붙어있음 */
+    .answer-dock {
+      border-top: 2px solid rgba(201,168,76,0.2);
+      padding: 12px 14px;
+      background: rgba(255,248,240,0.6);
+      display: flex; gap: 8px; align-items: center;
     }
-    .timer-num { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:22px; font-weight:900; color:var(--wine); }
-
-    .timer-score-hint {
-      flex: 1; background: linear-gradient(135deg,rgba(107,26,46,0.06),rgba(201,168,76,0.08));
-      border-radius: 12px; padding: 10px 14px;
-      border: 1px solid rgba(201,168,76,0.2);
-    }
-    .timer-score-hint .hint-label { font-size: 11px; color: var(--textM); }
-    .timer-score-hint .hint-pts { font-size: 26px; font-weight: 900; color: var(--gold); line-height: 1; margin-top: 2px; }
-    .timer-score-hint .hint-sub { font-size: 10px; color: var(--textM); margin-top: 2px; }
-
-    /* 타이머 색상 단계 */
-    .arc-green  { stroke: #43A047; }
-    .arc-orange { stroke: #FB8C00; }
-    .arc-red    { stroke: #E53935; }
-
-    /* 타임아웃 흔들림 */
-    @keyframes timerPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
-    .timer-pulse { animation: timerPulse 0.4s ease 3; }
-
-    /* ── QUESTION CARD ── */
-    .question-card { background:white; border-radius:18px; padding:22px; box-shadow:0 4px 24px rgba(107,26,46,0.10); border:1px solid rgba(201,168,76,0.18); margin-bottom:14px; }
-    .q-badge { display:inline-block; background:linear-gradient(135deg,var(--wine),var(--wine2)); color:white; font-size:11px; font-weight:700; padding:3px 11px; border-radius:20px; margin-bottom:12px; }
-    .q-text { color:var(--text); font-size:18px; font-weight:700; line-height:1.6; }
-    .q-hint { margin-top:10px; font-size:13px; color:var(--textM); background:rgba(201,168,76,0.08); border-radius:8px; padding:8px 12px; border-left:3px solid var(--gold); }
-
-    /* ── ANSWER INPUT AREA ── */
-    .answer-area { margin-bottom: 14px; }
-    .answer-input-wrap { position: relative; }
     .answer-input {
-      width: 100%; padding: 16px 60px 16px 18px;
-      border: 2.5px solid rgba(201,168,76,0.35);
-      border-radius: 14px; font-size: 18px; font-weight: 600;
+      flex:1; padding:13px 16px;
+      border: 2.5px solid rgba(201,168,76,0.4);
+      border-radius: 12px; font-size: 17px; font-weight: 600;
       color: var(--text); background: white;
       outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-      font-family: inherit;
-      -webkit-appearance: none;
+      font-family: inherit; -webkit-appearance: none; min-width:0;
     }
-    .answer-input:focus { border-color: var(--wine); box-shadow: 0 0 0 3px rgba(107,26,46,0.08); }
-    .answer-input.correct { border-color: var(--green); background: rgba(46,125,50,0.04); }
-    .answer-input.wrong   { border-color: var(--red);   background: rgba(198,40,40,0.04); }
-    .answer-input:disabled { background: #f9f5f0; }
+    .answer-input:focus { border-color: var(--wine); box-shadow: 0 0 0 3px rgba(107,26,46,0.1); }
+    .answer-input.correct { border-color: var(--green); background: rgba(46,125,50,0.05); }
+    .answer-input.wrong   { border-color: var(--red);   background: rgba(198,40,40,0.05); }
+    .answer-input:disabled { background: #f5f0ea; color: #999; }
     .answer-submit {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      width: 40px; height: 40px; border-radius: 10px;
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink:0;
       background: linear-gradient(135deg,var(--wine),var(--wine2));
-      color: white; border: none; cursor: pointer; font-size: 18px;
+      color: white; border: none; cursor: pointer; font-size: 22px; font-weight:700;
       display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.2s;
+      box-shadow: 0 3px 10px rgba(107,26,46,0.35);
+      transition: opacity 0.2s, transform 0.1s;
     }
-    .answer-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+    .answer-submit:active { transform: scale(0.94); }
+    .answer-submit:disabled { opacity:0.35; cursor:not-allowed; box-shadow:none; }
 
     /* ── FEEDBACK ── */
     .feedback { display:none; padding:14px 18px; border-radius:13px; margin-bottom:14px; text-align:center; animation:slideDown 0.28s ease; }
@@ -247,49 +236,34 @@
   <!-- ═══ QUIZ ═══ -->
   <div class="screen has-nav" id="screen-quiz">
 
-    <!-- 진행 표시 -->
-    <div class="progress-area">
-      <div class="progress-header">
-        <span class="q-num" id="qNum">1 / 50</span>
-        <span class="score-pill">⭐ <span id="curScore">0</span>점</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+    <!-- 상단: 진행도 + 점수 -->
+    <div class="quiz-topbar">
+      <span class="q-num" id="qNum">1 / 50</span>
+      <span class="score-pill">⭐ <span id="curScore">0</span>점</span>
     </div>
+    <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
 
-    <!-- 타이머 + 예상 점수 -->
-    <div class="timer-area">
-      <div class="timer-ring-wrap">
-        <svg class="timer-ring" viewBox="0 0 72 72">
-          <circle class="timer-bg" cx="36" cy="36" r="31"/>
-          <circle class="timer-arc arc-green" id="timerArc" cx="36" cy="36" r="31"/>
-        </svg>
-        <div class="timer-num" id="timerNum">30</div>
+    <!-- 타이머 가로 바 -->
+    <div class="timer-bar-wrap">
+      <div class="timer-bar-row">
+        <span class="timer-label">⏱ 남은 시간</span>
+        <span class="timer-secs" id="timerSecs">30</span>
       </div>
-      <div class="timer-score-hint">
-        <div class="hint-label">⚡ 지금 맞히면</div>
-        <div class="hint-pts"><span id="previewScore">100</span>점</div>
-        <div class="hint-sub">빨리 답할수록 점수 UP!</div>
+      <div class="timer-track"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+      <div class="score-preview-row">
+        <div class="score-preview-badge">⚡ 지금 맞히면 <span id="previewScore">100</span>점</div>
       </div>
     </div>
 
-    <!-- 피드백 -->
-    <div class="feedback" id="feedback">
-      <div class="fb-main" id="fbMain"></div>
-      <div class="fb-score" id="fbScore"></div>
-      <div class="fb-answer" id="fbAnswer"></div>
-      <div class="fb-exp" id="fbExp"></div>
-    </div>
-
-    <!-- 문제 카드 -->
+    <!-- 문제 카드 (입력창 포함) -->
     <div class="question-card">
-      <div class="q-badge">📖 성경 넌센스 퀴즈</div>
-      <div class="q-text" id="qText">문제를 불러오는 중...</div>
-      <div class="q-hint" id="qHint" style="display:none;"></div>
-    </div>
-
-    <!-- 주관식 입력 -->
-    <div class="answer-area">
-      <div class="answer-input-wrap">
+      <div class="q-card-top">
+        <div class="q-badge">📖 성경 넌센스 퀴즈</div>
+        <div class="q-text" id="qText">문제를 불러오는 중...</div>
+        <div class="q-hint" id="qHint" style="display:none;"></div>
+      </div>
+      <!-- 답 입력창 — 카드 하단 고정 -->
+      <div class="answer-dock">
         <input
           class="answer-input" id="answerInput"
           type="text" placeholder="정답을 입력하세요"
@@ -301,9 +275,17 @@
       </div>
     </div>
 
+    <!-- 피드백 -->
+    <div class="feedback" id="feedback">
+      <div class="fb-main" id="fbMain"></div>
+      <div class="fb-score" id="fbScore"></div>
+      <div class="fb-answer" id="fbAnswer"></div>
+      <div class="fb-exp" id="fbExp"></div>
+    </div>
+
     <!-- 다음 버튼 -->
     <div class="next-area" id="nextArea">
-      <button class="btn btn-wine" id="nextBtn" onclick="goNext()">다음 문제 →</button>
+      <button class="btn btn-wine" id="nextBtn">다음 문제 →</button>
     </div>
   </div>
 
@@ -406,26 +388,24 @@ function updateTimer() {
   const ratio    = timeLeft / S.timeLimitMs; // 1.0 → 0.0
 
   // 숫자 표시
-  document.getElementById('timerNum').textContent = secs;
+  document.getElementById('timerSecs').textContent = secs;
 
   // 예상 점수 미리보기
   const preview = Math.max(5, Math.round(ratio * 95 + 5));
   document.getElementById('previewScore').textContent = preview;
 
-  // 원형 진행바
-  const arc = document.getElementById('timerArc');
-  arc.style.strokeDashoffset = CIRCUMFERENCE * (1 - ratio);
+  // 가로 타이머 바
+  const fill = document.getElementById('timerFill');
+  fill.style.width = (ratio * 100) + '%';
+  fill.style.background =
+    ratio > 0.6 ? '#43A047' :
+    ratio > 0.3 ? '#FB8C00' :
+                  '#E53935';
 
-  // 색상 변화
-  arc.className = 'timer-arc ' + (
-    ratio > 0.6 ? 'arc-green' :
-    ratio > 0.3 ? 'arc-orange' :
-                  'arc-red'
-  );
-
-  // 숫자 색상
-  const numEl = document.getElementById('timerNum');
-  numEl.style.color = ratio > 0.3 ? 'var(--wine)' : 'var(--red)';
+  // 남은 초 색상
+  const secsEl = document.getElementById('timerSecs');
+  secsEl.style.color = ratio > 0.3 ? 'var(--wine)' : '#E53935';
+  secsEl.style.fontWeight = ratio <= 0.3 ? '900' : '700';
 
   // 시간 초과
   if (timeLeft <= 0 && !timerExpired) {
@@ -556,7 +536,7 @@ async function loadQ(idx) {
   if (!S.id) return;
   stopTimer();
 
-  // UI 초기화
+  // UI 초기화 (inp.focus()는 goNext에서 이미 호출됨)
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('nextArea').style.display = 'none';
   document.getElementById('qText').textContent = '문제를 불러오는 중...';
@@ -564,10 +544,8 @@ async function loadQ(idx) {
 
   const inp = document.getElementById('answerInput');
   const btn = document.getElementById('submitBtn');
-  inp.value = '';
-  inp.disabled = false;
-  inp.className = 'answer-input';
-  inp.placeholder = '정답을 입력하세요';
+  // goNext에서 이미 리셋했을 수 있지만 초기 로드를 위해 재확인
+  if (!inp.disabled) inp.placeholder = '정답을 입력하세요';
   btn.disabled = false;
 
   try {
@@ -579,7 +557,6 @@ async function loadQ(idx) {
     S.total = d.total;
     S.timeLimitMs = d.timeLimitMs || 30000;
 
-    // 진행 UI
     document.getElementById('qNum').textContent = `${idx+1} / ${d.total}`;
     document.getElementById('curScore').textContent = S.score;
     document.getElementById('pFill').style.width = `${(idx/d.total)*100}%`;
@@ -587,13 +564,18 @@ async function loadQ(idx) {
 
     if (d.hint) {
       const hintEl = document.getElementById('qHint');
-      hintEl.textContent = '힌트: ' + d.hint;
+      hintEl.textContent = '💡 힌트: ' + d.hint;
       hintEl.style.display = 'block';
     }
 
-    // 타이머 시작 (서버 startTime 기준으로 동기화)
+    // 타이머 시작
     startTimer(d.startTime);
-    inp.focus();
+
+    // 첫 문제 or 초기 진입일 때만 (비동기 후) 포커스
+    // (goNext 경유 시에는 이미 동기적으로 포커스됨)
+    if (idx === 0) {
+      setTimeout(() => { inp.disabled = false; inp.focus(); }, 100);
+    }
 
   } catch(e) { console.error(e); }
 }
@@ -668,12 +650,13 @@ async function submitToServer(answer, isTimeout) {
     const na = document.getElementById('nextArea');
     na.style.display = 'block';
     const nb = document.getElementById('nextBtn');
+    // onclick 직접 할당 — 클릭 시 사용자 제스처로 인식되어 iOS 키보드 정상 동작
     if (d.nextIndex >= S.total) {
       nb.textContent = '결과 보기 🎊';
       nb.onclick = finishQuiz;
     } else {
       nb.textContent = '다음 문제 →';
-      nb.onclick = goNext;
+      nb.onclick = goNext;  // goNext 안에서 동기적 focus() 호출
     }
 
   } catch(e) { console.error(e); }
@@ -681,6 +664,14 @@ async function submitToServer(answer, isTimeout) {
 
 function goNext() {
   sfxNext();
+
+  // ★ iOS 핵심: 버튼 클릭(사용자 제스처) 안에서 동기적으로 focus() 호출해야 키보드가 열림
+  const inp = document.getElementById('answerInput');
+  inp.disabled = false;
+  inp.value = '';
+  inp.className = 'answer-input';
+  inp.focus();
+
   loadQ(S.idx);
 }
 
