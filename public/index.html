@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#6B1A2E">
+  <title>오륜교회 성경 넌센스 퀴즈</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --wine:    #6B1A2E;
+      --wine2:   #8B2840;
+      --gold:    #C9A84C;
+      --gold2:   #A07828;
+      --cream:   #FFF8F0;
+      --cream2:  #FFF0DC;
+      --text:    #2C1810;
+      --textM:   #6A4A38;
+      --green:   #2E7D32;
+      --red:     #C62828;
+      --white:   #FFFFFF;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== LAYOUT ===== */
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(160deg, var(--wine) 0%, #9B2840 60%, #6B1A2E 100%);
+      color: white;
+      padding: 28px 20px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -30px; left: -30px; right: -30px;
+      height: 80px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 0; right: 0;
+      height: 42px;
+      background: var(--cream);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+    .header-cross {
+      font-size: 44px;
+      margin-bottom: 6px;
+      display: block;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+    }
+    .header h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; }
+    .header h2 { font-size: 13px; font-weight: 400; opacity: 0.8; margin-top: 4px; }
+    .header-gold { height: 2px; background: linear-gradient(90deg,transparent,var(--gold),transparent); margin: 10px auto; width: 55%; }
+
+    /* ===== SOUND BTN ===== */
+    #soundBtn {
+      position: fixed; top: 14px; right: 14px; z-index: 300;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: none; cursor: pointer; font-size: 18px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ===== SCREENS ===== */
+    .screen { display: none; flex: 1; padding: 24px 16px 20px; animation: fadeUp 0.35s ease; }
+    .screen.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 4px 24px rgba(107,26,46,0.10);
+      border: 1px solid rgba(201,168,76,0.18);
+      margin-bottom: 14px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      width: 100%; padding: 16px; border: none; border-radius: 13px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      font-family: inherit; letter-spacing: -0.3px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-wine {
+      background: linear-gradient(135deg, var(--wine) 0%, var(--wine2) 100%);
+      color: white; box-shadow: 0 5px 18px rgba(107,26,46,0.38);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+      color: white; box-shadow: 0 5px 18px rgba(201,168,76,0.38);
+    }
+    .btn-outline {
+      background: transparent; border: 2px solid var(--wine); color: var(--wine);
+    }
+    .btn + .btn { margin-top: 10px; }
+
+    /* ===== INPUT ===== */
+    .input-wrap { margin: 14px 0; }
+    .input-wrap label { display: block; color: var(--textM); font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+    .input-wrap input {
+      width: 100%; padding: 14px 16px; border: 2px solid rgba(201,168,76,0.3);
+      border-radius: 11px; font-size: 16px; color: var(--text);
+      background: white; outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    .input-wrap input:focus { border-color: var(--gold); }
+
+    /* ===== WELCOME ===== */
+    .welcome-emoji { font-size: 74px; text-align: center; margin: 16px 0; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .welcome-title { text-align: center; color: var(--wine); font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 6px; }
+    .welcome-sub { text-align: center; color: var(--textM); font-size: 14px; line-height: 1.7; }
+    .info-box {
+      background: linear-gradient(135deg, rgba(107,26,46,0.04), rgba(201,168,76,0.06));
+      border: 1px solid rgba(201,168,76,0.28); border-radius: 13px;
+      padding: 14px 16px; margin: 14px 0;
+    }
+    .info-row { display: flex; align-items: center; gap: 9px; color: var(--textM); font-size: 13px; padding: 4px 0; }
+    .info-row span:first-child { font-size: 18px; }
+    .verse { text-align: center; color: var(--textM); font-size: 12px; font-style: italic; padding: 14px 10px; border-top: 1px solid rgba(201,168,76,0.2); margin-top: 8px; line-height: 1.7; }
+
+    /* ===== QUIZ SCREEN ===== */
+    .progress-area { margin-bottom: 14px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .q-num { color: var(--wine); font-weight: 700; font-size: 13px; }
+    .score-pill {
+      background: linear-gradient(135deg, var(--wine), var(--wine2));
+      color: white; padding: 4px 13px; border-radius: 20px; font-size: 13px; font-weight: 700;
+    }
+    .progress-bar { height: 7px; background: rgba(107,26,46,0.1); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--wine), var(--gold)); border-radius: 4px; transition: width 0.5s ease; }
+
+    .question-card { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 4px 24px rgba(107,26,46,0.10); border: 1px solid rgba(201,168,76,0.18); margin-bottom: 14px; }
+    .q-badge { display: inline-block; background: linear-gradient(135deg,var(--wine),var(--wine2)); color: white; font-size: 11px; font-weight: 700; padding: 3px 11px; border-radius: 20px; margin-bottom: 13px; letter-spacing: 0.5px; }
+    .q-text { color: var(--text); font-size: 17px; font-weight: 700; line-height: 1.6; }
+
+    .options { display: flex; flex-direction: column; gap: 9px; }
+    .opt {
+      width: 100%; padding: 13px 16px; border: 2px solid rgba(201,168,76,0.22);
+      border-radius: 13px; background: white; text-align: left; cursor: pointer;
+      transition: all 0.18s ease; display: flex; align-items: center; gap: 11px;
+      font-size: 15px; color: var(--text); font-family: inherit; font-weight: 500;
+    }
+    .opt:hover:not(:disabled) { border-color: var(--wine); background: rgba(107,26,46,0.04); }
+    .opt:active:not(:disabled) { transform: scale(0.99); }
+    .opt.correct { border-color: var(--green); background: rgba(46,125,50,0.07); color: var(--green); }
+    .opt.wrong   { border-color: var(--red);   background: rgba(198,40,40,0.07);  color: var(--red); }
+    .opt:disabled { cursor: not-allowed; }
+    .opt-lbl {
+      min-width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg,var(--wine),var(--wine2));
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .opt.correct .opt-lbl { background: var(--green); }
+    .opt.wrong   .opt-lbl { background: var(--red); }
+
+    .feedback {
+      display: none; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px;
+      font-size: 14px; font-weight: 700; text-align: center; animation: slideDown 0.28s ease;
+    }
+    @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+    .feedback.ok  { display:block; background:rgba(46,125,50,0.1);  border:1px solid var(--green); color:var(--green); }
+    .feedback.bad { display:block; background:rgba(198,40,40,0.1);  border:1px solid var(--red);   color:var(--red); }
+    .feedback-exp { font-size: 12px; font-weight: 400; margin-top: 5px; color: var(--textM); }
+
+    .next-area { display: none; margin-top: 14px; }
+
+    /* ===== RESULT ===== */
+    .result-icon { font-size: 76px; text-align: center; margin: 16px 0 8px; animation: popIn 0.45s ease; }
+    @keyframes popIn { 0%{transform:scale(0.4)} 70%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    .result-title { text-align:center; font-size:24px; font-weight:800; color:var(--wine); }
+    .big-score { text-align:center; font-size:62px; font-weight:900; color:var(--gold); line-height:1; margin:18px 0 4px; text-shadow:0 2px 8px rgba(201,168,76,0.25); }
+    .big-score-lbl { text-align:center; color:var(--textM); font-size:13px; margin-bottom:18px; }
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .stat-box { text-align:center; padding:16px 10px; background:rgba(107,26,46,0.05); border-radius:12px; }
+    .stat-val { font-size:26px; font-weight:800; color:var(--wine); }
+    .stat-lbl { font-size:11px; color:var(--textM); margin-top:2px; }
+
+    /* ===== LEADERBOARD ===== */
+    .lb-header { text-align:center; margin-bottom:18px; }
+    .lb-header .emoji { font-size:40px; }
+    .lb-title { color:var(--wine); font-size:21px; font-weight:800; margin-top:4px; }
+    .lb-sub { font-size:12px; color:var(--textM); }
+    .rank-list { display:flex; flex-direction:column; gap:9px; }
+    .rank-item {
+      display:flex; align-items:center; gap:12px; padding:13px 16px;
+      background:white; border-radius:14px;
+      box-shadow:0 2px 10px rgba(107,26,46,0.07);
+      border:1px solid rgba(201,168,76,0.13);
+      transition: transform 0.2s;
+      animation: fadeUp 0.3s ease;
+    }
+    .rank-item.top { border-color:rgba(201,168,76,0.4); background:linear-gradient(135deg,#FFFEF5,white); }
+    .rank-medal { font-size:26px; min-width:32px; text-align:center; }
+    .rank-info { flex:1; min-width:0; }
+    .rank-name { font-weight:700; font-size:15px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .rank-prog { font-size:11px; color:var(--textM); margin-top:2px; }
+    .rank-score-wrap { text-align:right; }
+    .rank-score { font-size:22px; font-weight:900; color:var(--wine); }
+    .rank-score-unit { font-size:11px; color:var(--textM); }
+    .rank-badge { display:inline-block; font-size:10px; background:var(--gold); color:white; padding:1px 7px; border-radius:10px; margin-left:4px; font-weight:700; }
+
+    .loading-box { text-align:center; color:var(--textM); padding:30px; }
+    .spinner { width:36px; height:36px; border:3px solid rgba(107,26,46,0.15); border-top-color:var(--wine); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+      width:100%; max-width:480px; background:white;
+      border-top:1px solid rgba(201,168,76,0.2);
+      display:none; padding:6px 0 env(safe-area-inset-bottom,6px); z-index:200;
+    }
+    .bottom-nav.show { display:flex; }
+    .nav-btn { flex:1; padding:8px; text-align:center; cursor:pointer; border:none; background:none; color:var(--textM); font-size:10px; font-family:inherit; transition:color 0.15s; }
+    .nav-btn.active { color:var(--wine); }
+    .nav-icon { font-size:22px; display:block; margin-bottom:2px; }
+    .has-nav { padding-bottom: 80px; }
+
+    /* ===== CONFETTI ===== */
+    #confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:500; }
+
+    /* ===== SHAKE / PULSE ===== */
+    .shake { animation: shakeX 0.4s ease; }
+    @keyframes shakeX { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-7px)} 40%,80%{transform:translateX(7px)} }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="header-cross">✝</span>
+    <h1>오륜교회 성경 넌센스 퀴즈</h1>
+    <div class="header-gold"></div>
+    <h2>신혼부부 행복 축복 행사 🎉</h2>
+  </div>
+
+  <!-- SOUND BTN -->
+  <button id="soundBtn" onclick="toggleSound()" title="배경음악 켜기/끄기">🔊</button>
+
+  <!-- ======= WELCOME ======= -->
+  <div class="screen active" id="screen-welcome">
+    <div class="welcome-emoji">📖✨</div>
+    <div class="card">
+      <div class="welcome-title">성경 넌센스 퀴즈에<br>오신 것을 환영합니다!</div>
+      <div class="header-gold" style="margin:12px auto;"></div>
+      <div class="welcome-sub">말씀 속에 숨겨진 재미있는 수수께끼를<br>부부가 함께 풀어보아요!</div>
+      <div class="info-box">
+        <div class="info-row"><span>❓</span><span id="totalQInfo">문제 도전!</span></div>
+        <div class="info-row"><span>🏆</span><span>1~5위 시상식 진행</span></div>
+        <div class="info-row"><span>👫</span><span>두 분이 함께 참여하세요</span></div>
+        <div class="info-row"><span>⭐</span><span>정답 1개 = 10점</span></div>
+      </div>
+      <button class="btn btn-wine" onclick="showRegister()">퀴즈 시작하기 →</button>
+    </div>
+    <div class="verse">"주의 말씀은 내 발에 등이요 내 길에 빛이니이다"<br>(시편 119:105)</div>
+  </div>
+
+  <!-- ======= REGISTER ======= -->
+  <div class="screen" id="screen-register">
+    <div class="card">
+      <h3 style="color:var(--wine);font-size:18px;margin-bottom:14px;">👫 가정 등록</h3>
+      <div class="input-wrap">
+        <label>가정 이름을 입력해주세요</label>
+        <input type="text" id="nameInput" placeholder="예: 김철수·이영희 가정" maxlength="20" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <p style="color:var(--textM);font-size:12px;margin-bottom:14px;">💡 부부 두 분의 이름을 함께 입력하면 더욱 좋아요!</p>
+      <button class="btn btn-wine" onclick="doRegister()">등록하고 퀴즈 시작! ✨</button>
+      <button class="btn btn-outline" onclick="showScreen('welcome')">← 돌아가기</button>
+    </div>
+  </div>
+
+  <!-- ======= QUIZ ======= -->
+  <div class="screen has-nav" id="screen-quiz">
+    <!-- Progress -->
+    <div class="progress-area">
+      <div class="progress-header">
+        <span class="q-num" id="qNum">1 / 50</span>
+        <span class="score-pill">⭐ <span id="curScore">0</span>점</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+    </div>
+    <!-- Feedback -->
+    <div class="feedback" id="feedback">
+      <div id="fbText"></div>
+      <div class="feedback-exp" id="fbExp"></div>
+    </div>
+    <!-- Question -->
+    <div class="question-card">
+      <div class="q-badge">📖 성경 넌센스</div>
+      <div class="q-text" id="qText">문제를 불러오는 중...</div>
+    </div>
+    <!-- Options -->
+    <div class="options" id="opts"></div>
+    <!-- Next -->
+    <div class="next-area" id="nextArea">
+      <button class="btn btn-wine" id="nextBtn" onclick="goNext()">다음 문제 →</button>
+    </div>
+  </div>
+
+  <!-- ======= RESULT ======= -->
+  <div class="screen has-nav" id="screen-result">
+    <div class="result-icon" id="resultIcon">🎊</div>
+    <div class="result-title" id="resultTitle">퀴즈 완료!</div>
+    <div class="card" style="margin-top:14px;">
+      <div class="big-score" id="bigScore">0점</div>
+      <div class="big-score-lbl">최종 점수</div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val" id="cntOk">0</div><div class="stat-lbl">✅ 정답</div></div>
+        <div class="stat-box"><div class="stat-val" id="cntBad">0</div><div class="stat-lbl">❌ 오답</div></div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:15px;font-weight:700;color:var(--wine);margin-bottom:6px;">🏆 실시간 순위 확인!</div>
+      <p style="color:var(--textM);font-size:13px;margin-bottom:14px;">리더보드에서 내 순위를 확인해 보세요</p>
+      <button class="btn btn-gold" onclick="navTo('leaderboard')">🏅 순위 보기</button>
+    </div>
+    <div class="verse">"네 시작은 미약하였으나 네 나중은 심히 창대하리라"<br>(욥기 8:7)</div>
+  </div>
+
+  <!-- ======= LEADERBOARD ======= -->
+  <div class="screen has-nav" id="screen-leaderboard">
+    <div class="lb-header">
+      <div class="emoji">🏆</div>
+      <div class="lb-title">실시간 순위표</div>
+      <div class="lb-sub">자동으로 업데이트됩니다</div>
+    </div>
+    <div class="rank-list" id="rankList">
+      <div class="loading-box"><div class="spinner"></div>순위를 불러오는 중...</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" id="bottomNav">
+    <button class="nav-btn active" id="nav-quiz" onclick="navTo('quiz')"><span class="nav-icon">📝</span>퀴즈</button>
+    <button class="nav-btn" id="nav-result" onclick="navTo('result')"><span class="nav-icon">⭐</span>내 점수</button>
+    <button class="nav-btn" id="nav-leaderboard" onclick="navTo('leaderboard')"><span class="nav-icon">🏆</span>순위</button>
+  </div>
+</div>
+
+<!-- Confetti -->
+<canvas id="confetti"></canvas>
+
+<script>
+// ============================================================
+//  STATE
+// ============================================================
+const S = {
+  id:        sessionStorage.getItem('fid') || null,
+  name:      sessionStorage.getItem('fname') || '',
+  idx:       parseInt(sessionStorage.getItem('fidx') || '0'),
+  score:     parseInt(sessionStorage.getItem('fscore') || '0'),
+  correct:   parseInt(sessionStorage.getItem('fcorrect') || '0'),
+  total:     0,
+  answered:  false,
+  done:      sessionStorage.getItem('fdone') === '1',
+  soundOn:   true
+};
+
+function save() {
+  sessionStorage.setItem('fid',      S.id);
+  sessionStorage.setItem('fname',    S.name);
+  sessionStorage.setItem('fidx',     S.idx);
+  sessionStorage.setItem('fscore',   S.score);
+  sessionStorage.setItem('fcorrect', S.correct);
+  sessionStorage.setItem('fdone',    S.done ? '1' : '0');
+}
+
+// ============================================================
+//  AUDIO ENGINE
+// ============================================================
+let AC = null, bgTimer = null, bgIdx = 0, bgPlaying = false;
+
+function ac() {
+  if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+  return AC;
+}
+
+function tone(freq, dur, type='sine', vol=0.28, delay=0) {
+  if (!S.soundOn) return;
+  try {
+    const c = ac();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.type = type;
+    o.frequency.setValueAtTime(freq, c.currentTime + delay);
+    g.gain.setValueAtTime(0, c.currentTime + delay);
+    g.gain.linearRampToValueAtTime(vol, c.currentTime + delay + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + dur);
+    o.start(c.currentTime + delay);
+    o.stop(c.currentTime + delay + dur + 0.05);
+  } catch(e){}
+}
+
+// 정답 팡파레
+function sfxOk() {
+  [[523,0.13,0],[659,0.13,0.1],[784,0.13,0.2],[1047,0.35,0.3]]
+    .forEach(([f,d,t])=>tone(f,d,'sine',0.25,t));
+}
+// 오답
+function sfxBad() {
+  [[370,0.18,0],[330,0.18,0.16],[262,0.35,0.32]]
+    .forEach(([f,d,t])=>tone(f,d,'sawtooth',0.14,t));
+}
+// 다음문제
+function sfxNext() {
+  tone(440,0.09,'sine',0.18,0);
+  tone(523,0.13,'sine',0.18,0.08);
+}
+// 완료 팡파레
+function sfxDone() {
+  [[523,0.13,0],[523,0.13,0.14],[523,0.13,0.28],[415,0.09,0.42],[523,0.13,0.52],[659,0.38,0.66],[784,0.45,1.05],[1047,0.6,1.5]]
+    .forEach(([f,d,t])=>tone(f,d,'triangle',0.28,t));
+}
+
+// 배경음악 (교회 찬송가 느낌)
+const BG_MELODY = [
+  [261,0.4],[294,0.2],[330,0.4],[261,0.4],
+  [330,0.4],[349,0.2],[392,0.8],
+  [261,0.4],[294,0.2],[330,0.4],[261,0.8],
+  [392,0.4],[330,0.4],[294,0.4],[261,0.8],
+];
+
+function bgPlay() {
+  if (!bgPlaying || !S.soundOn) return;
+  const [f,d] = BG_MELODY[bgIdx % BG_MELODY.length];
+  tone(f, d * 0.82, 'sine', 0.07);
+  bgIdx++;
+  bgTimer = setTimeout(bgPlay, d * 1000);
+}
+function bgStart() {
+  if (bgPlaying) return;
+  bgPlaying = true;
+  bgPlay();
+}
+function bgStop() {
+  bgPlaying = false;
+  if (bgTimer) clearTimeout(bgTimer);
+}
+function toggleSound() {
+  S.soundOn = !S.soundOn;
+  document.getElementById('soundBtn').textContent = S.soundOn ? '🔊' : '🔇';
+  S.soundOn ? bgStart() : bgStop();
+}
+
+// ============================================================
+//  SCREENS
+// ============================================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  const nav = document.getElementById('bottomNav');
+  const isMain = ['quiz','result','leaderboard'].includes(name);
+  nav.classList.toggle('show', isMain && !!S.id);
+  if (isMain) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const nb = document.getElementById('nav-'+name);
+    if (nb) nb.classList.add('active');
+  }
+}
+
+function navTo(name) {
+  showScreen(name);
+  if (name === 'leaderboard') fetchLB();
+}
+
+function showRegister() {
+  if (S.id) {
+    if (S.done) { showScreen('result'); renderResult(); }
+    else { showScreen('quiz'); loadQ(S.idx); }
+    document.getElementById('bottomNav').classList.add('show');
+  } else {
+    showScreen('register');
+  }
+}
+
+// ============================================================
+//  REGISTER
+// ============================================================
+async function doRegister() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    const inp = document.getElementById('nameInput');
+    inp.classList.add('shake');
+    setTimeout(()=>inp.classList.remove('shake'), 400);
+    return;
+  }
+  try {
+    const r = await fetch('/api/register', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name})
+    });
+    const d = await r.json();
+    if (d.id) {
+      S.id=d.id; S.name=name; S.total=d.totalQuestions;
+      S.idx=0; S.score=0; S.correct=0; S.done=false;
+      save();
+      document.getElementById('totalQInfo').textContent = `총 ${d.totalQuestions}문제 도전!`;
+      showScreen('quiz');
+      document.getElementById('bottomNav').classList.add('show');
+      bgStart();
+      loadQ(0);
+    }
+  } catch(e) {
+    alert('서버 연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  }
+}
+
+// ============================================================
+//  QUIZ
+// ============================================================
+async function loadQ(idx) {
+  if (!S.id) return;
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextArea').style.display = 'none';
+  document.getElementById('opts').innerHTML = '<div class="loading-box"><div class="spinner"></div></div>';
+  S.answered = false;
+
+  try {
+    const r = await fetch(`/api/question/${S.id}/${idx}`);
+    const d = await r.json();
+
+    if (d.done) { finishQuiz(); return; }
+
+    S.total = d.total;
+    document.getElementById('qNum').textContent = `${idx+1} / ${d.total}`;
+    document.getElementById('curScore').textContent = S.score;
+    document.getElementById('pFill').style.width = `${(idx/d.total)*100}%`;
+    document.getElementById('qText').textContent = d.question;
+
+    const lbls = ['①','②','③','④','⑤'];
+    const grid = document.getElementById('opts');
+    grid.innerHTML = '';
+    d.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<span class="opt-lbl">${lbls[i]}</span><span>${opt}</span>`;
+      btn.onclick = () => submitAnswer(idx, i);
+      grid.appendChild(btn);
+    });
+  } catch(e) { console.error(e); }
+}
+
+async function submitAnswer(qIdx, chosen) {
+  if (S.answered) return;
+  S.answered = true;
+
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach(b => b.disabled = true);
+
+  try {
+    const r = await fetch('/api/answer', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ familyId:S.id, questionIndex:qIdx, answer:chosen })
+    });
+    const d = await r.json();
+
+    // 정답 표시
+    btns.forEach((b,i) => {
+      if (i === d.correctAnswer) b.classList.add('correct');
+      else if (i === chosen && !d.correct) b.classList.add('wrong');
+    });
+
+    // 피드백
+    const fb = document.getElementById('feedback');
+    document.getElementById('fbText').textContent = d.correct ? '🎉 정답입니다! +10점' : '❌ 아쉽네요!';
+    document.getElementById('fbExp').textContent = d.explanation ? '💡 ' + d.explanation : '';
+    fb.className = 'feedback ' + (d.correct ? 'ok' : 'bad');
+
+    if (d.correct) { sfxOk(); launchConfetti(); }
+    else { sfxBad(); }
+
+    S.score = d.score;
+    S.idx   = d.nextIndex;
+    if (d.correct) S.correct++;
+    save();
+    document.getElementById('curScore').textContent = S.score;
+
+    // 다음 버튼
+    const na = document.getElementById('nextArea');
+    na.style.display = 'block';
+    const nb = document.getElementById('nextBtn');
+    if (d.nextIndex >= S.total) {
+      nb.textContent = '결과 보기 🎊';
+      nb.onclick = finishQuiz;
+    } else {
+      nb.textContent = '다음 문제 →';
+      nb.onclick = goNext;
+    }
+  } catch(e) {
+    S.answered = false;
+    btns.forEach(b => b.disabled = false);
+  }
+}
+
+function goNext() {
+  sfxNext();
+  loadQ(S.idx);
+}
+
+function finishQuiz() {
+  S.done = true; save();
+  bgStop();
+  sfxDone();
+  launchConfetti(true);
+  renderResult();
+  showScreen('result');
+}
+
+function renderResult() {
+  const wrong = S.idx - S.correct;
+  document.getElementById('bigScore').textContent = S.score + '점';
+  document.getElementById('cntOk').textContent  = S.correct;
+  document.getElementById('cntBad').textContent = Math.max(0, wrong);
+  const pct = S.total > 0 ? S.correct / S.total * 100 : 0;
+  let icon='🎊', title='퀴즈 완료!';
+  if (pct===100) { icon='🏆'; title='만점! 완벽합니다!'; }
+  else if (pct>=80) { icon='🎊'; title='훌륭해요! 대단해요!'; }
+  else if (pct>=60) { icon='😊'; title='잘 하셨어요!'; }
+  else { icon='📖'; title='말씀을 더 읽어봐요!'; }
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultTitle').textContent = title;
+}
+
+// ============================================================
+//  LEADERBOARD (SSE + 수동)
+// ============================================================
+let sse = null;
+function connectSSE() {
+  if (sse) return;
+  sse = new EventSource('/api/events');
+  sse.onmessage = e => {
+    const m = JSON.parse(e.data);
+    if (m.type === 'leaderboard') renderLB(m.data);
+  };
+  sse.onerror = () => {
+    sse.close(); sse = null;
+    setTimeout(connectSSE, 4000);
+  };
+}
+
+async function fetchLB() {
+  try {
+    const r = await fetch('/api/leaderboard');
+    renderLB(await r.json());
+  } catch(e){}
+}
+
+const MEDALS = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+
+function renderLB(data) {
+  const el = document.getElementById('rankList');
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div class="loading-box">아직 참가 가정이 없습니다<br>퀴즈를 시작해주세요! 🙏</div>';
+    return;
+  }
+  el.innerHTML = data.map((f,i) => `
+    <div class="rank-item ${i<5?'top':''}">
+      <div class="rank-medal">${MEDALS[i]||i+1}</div>
+      <div class="rank-info">
+        <div class="rank-name">${esc(f.name)} ${f.name===S.name?'<span class="rank-badge">나</span>':''}</div>
+        <div class="rank-prog">${f.completed?'✅ 완료':'진행중 '+f.progress+'/'+f.total+'문제'}</div>
+      </div>
+      <div class="rank-score-wrap">
+        <div class="rank-score">${f.score}</div>
+        <div class="rank-score-unit">점</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(s));
+  return d.innerHTML;
+}
+
+// ============================================================
+//  CONFETTI
+// ============================================================
+let cParticles = [], cRunning = false;
+
+function launchConfetti(big=false) {
+  const cv = document.getElementById('confetti');
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  const ctx = cv.getContext('2d');
+  const colors = ['#6B1A2E','#C9A84C','#2E7D32','#1565C0','#E91E63','#FF9800','#9C27B0'];
+  const n = big ? 180 : 60;
+  for (let i=0;i<n;i++) {
+    cParticles.push({
+      x: Math.random()*cv.width, y: Math.random()*cv.height - cv.height,
+      w: Math.random()*10+5, h: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      vx: (Math.random()-0.5)*3.5, vy: Math.random()*3+2,
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.18
+    });
+  }
+  if (!cRunning) { cRunning=true; animConfetti(ctx,cv); }
+}
+
+function animConfetti(ctx,cv) {
+  ctx.clearRect(0,0,cv.width,cv.height);
+  cParticles = cParticles.filter(p=>p.y<cv.height+20);
+  cParticles.forEach(p=>{
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
+    p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.vy+=0.06;
+  });
+  if (cParticles.length>0) requestAnimationFrame(()=>animConfetti(ctx,cv));
+  else { cRunning=false; ctx.clearRect(0,0,cv.width,cv.height); }
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+function init() {
+  connectSSE();
+  fetch('/api/leaderboard')
+    .then(r=>r.json())
+    .then(d => { if (d.length) document.getElementById('totalQInfo').textContent = `총 ${d[0]?.total||'?'}문제 도전!`; })
+    .catch(()=>{});
+
+  if (S.id) {
+    document.getElementById('bottomNav').classList.add('show');
+    if (S.done) {
+      showScreen('result'); renderResult();
+    } else {
+      showScreen('quiz'); bgStart(); loadQ(S.idx);
+    }
+  }
+
+  // 첫 터치 시 AudioContext 활성화
+  document.addEventListener('touchstart', ()=>{
+    try { if(AC) AC.resume(); } catch(e){}
+  }, {once:true, passive:true});
+}
+
+init();
+</script>
+</body>
+</html>

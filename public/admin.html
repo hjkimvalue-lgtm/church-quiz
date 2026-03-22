@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📋 오륜교회 퀴즈 어드민</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --wine: #6B1A2E; --wine2: #8B2840;
+      --gold: #C9A84C; --gold2: #A07828;
+      --cream: #FFF8F0; --text: #2C1810; --textM: #6A4A38;
+      --green: #2E7D32; --red: #C62828;
+    }
+    body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background: #1A0A0F; color: white; min-height: 100vh; }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--wine) 0%, #3A0A16 100%);
+      padding: 20px 30px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+    .header h1 { font-size: 22px; font-weight: 800; }
+    .header h1 span { color: var(--gold); }
+    .header-right { display: flex; gap: 10px; }
+
+    /* LAYOUT */
+    .main { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+
+    /* PANELS */
+    .panel {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 16px; padding: 20px;
+    }
+    .panel-title {
+      font-size: 14px; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* QR */
+    #qr-container { background: white; padding: 16px; border-radius: 12px; display: inline-block; margin: 0 auto; display: flex; justify-content: center; }
+    .qr-url { text-align: center; margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.7); word-break: break-all; }
+    .qr-label { text-align: center; font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 12px; }
+
+    /* STATS */
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stat-box { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; text-align: center; border: 1px solid rgba(201,168,76,0.15); }
+    .stat-val { font-size: 32px; font-weight: 900; color: var(--gold); }
+    .stat-lbl { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    /* LEADERBOARD */
+    .lb-table { width: 100%; border-collapse: collapse; }
+    .lb-table th { padding: 10px 14px; text-align: left; font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .lb-table td { padding: 12px 14px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.3s; }
+    .lb-table tr:hover td { background: rgba(255,255,255,0.04); }
+    .lb-table tr.top-5 td { background: rgba(201,168,76,0.07); }
+    .medal { font-size: 22px; }
+    .name-cell { font-weight: 700; font-size: 16px; }
+    .score-cell { font-size: 20px; font-weight: 900; color: var(--gold); text-align: right; }
+    .prog-cell { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .badge-done { display: inline-block; background: var(--green); color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+    .badge-prog { display: inline-block; background: rgba(201,168,76,0.3); color: var(--gold); font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+
+    /* LIVE INDICATOR */
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; display: inline-block; animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* BUTTONS */
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: transform 0.15s, opacity 0.15s; }
+    .btn:active { transform: scale(0.97); }
+    .btn-gold { background: linear-gradient(135deg,var(--gold),var(--gold2)); color: white; }
+    .btn-red  { background: linear-gradient(135deg,#C62828,#8B1A1A); color: white; }
+    .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; }
+
+    /* PROJECTOR MODE */
+    .projector-overlay {
+      display: none; position: fixed; top:0;left:0;right:0;bottom:0;
+      background: linear-gradient(160deg, #1A0A0F 0%, #2A0A1A 100%);
+      z-index: 1000; padding: 40px;
+      flex-direction: column;
+    }
+    .projector-overlay.show { display: flex; }
+    .proj-header { text-align: center; margin-bottom: 30px; }
+    .proj-cross { font-size: 52px; }
+    .proj-title { font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 0 3px 20px rgba(201,168,76,0.4); margin-top: 8px; }
+    .proj-sub { font-size: 20px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+    .proj-gold { height: 2px; background: linear-gradient(90deg,transparent,var(--gold),transparent); margin: 16px auto; width: 40%; }
+    .proj-list { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+    .proj-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 16px 28px; border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.15);
+    }
+    .proj-item.top { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.4); }
+    .proj-rank { font-size: 34px; min-width: 44px; }
+    .proj-name { flex:1; font-size: 28px; font-weight: 800; }
+    .proj-score { font-size: 36px; font-weight: 900; color: var(--gold); }
+    .proj-pts { font-size: 16px; color: rgba(255,255,255,0.5); }
+    .proj-close { position: fixed; top: 20px; right: 20px; font-size: 28px; cursor: pointer; opacity: 0.6; background: none; border: none; color: white; }
+
+    /* MODAL */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; align-items: center; justify-content: center; }
+    .modal-bg.show { display: flex; }
+    .modal { background: #2A1018; border: 1px solid var(--gold); border-radius: 16px; padding: 28px; width: 340px; }
+    .modal h3 { color: var(--gold); margin-bottom: 16px; }
+    .modal input { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.08); color: white; font-size: 16px; font-family: inherit; outline: none; margin-bottom: 14px; }
+    .modal-btns { display: flex; gap: 10px; }
+
+    .empty-msg { text-align: center; color: rgba(255,255,255,0.4); padding: 40px; font-size: 15px; }
+
+    /* Update flash */
+    @keyframes flashRow { 0%{background:rgba(201,168,76,0.25)} 100%{background:transparent} }
+    .flash { animation: flashRow 0.6s ease; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>✝ 오륜교회 <span>성경 넌센스 퀴즈</span> 관리자</h1>
+  <div class="header-right">
+    <span class="live-dot"></span>
+    <span style="font-size:13px;color:rgba(255,255,255,0.6);margin-left:4px;" id="liveStatus">실시간 연결 중...</span>
+    <button class="btn btn-gold" onclick="showProjector()">📺 프로젝터 모드</button>
+    <button class="btn btn-outline" onclick="showResetModal()">🔄 초기화</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- LEFT: QR + Stats -->
+  <div>
+    <!-- QR Panel -->
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="panel-title">📱 QR 코드 (참가자 접속용)</div>
+      <div class="qr-label">스마트폰으로 스캔하세요</div>
+      <div id="qr-container"></div>
+      <div class="qr-url" id="quizUrl">주소를 불러오는 중...</div>
+      <div style="margin-top:14px;text-align:center;">
+        <button class="btn btn-outline" onclick="copyUrl()" style="font-size:12px;padding:8px 16px;">🔗 주소 복사</button>
+      </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="panel">
+      <div class="panel-title">📊 현황</div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val" id="sTot">0</div><div class="stat-lbl">총 참가 가정</div></div>
+        <div class="stat-box"><div class="stat-val" id="sDone" style="color:#4CAF50;">0</div><div class="stat-lbl">완료 가정</div></div>
+        <div class="stat-box"><div class="stat-val" id="sIn" style="color:var(--gold);">0</div><div class="stat-lbl">진행 중</div></div>
+        <div class="stat-box"><div class="stat-val" id="sQ">0</div><div class="stat-lbl">총 문제 수</div></div>
+      </div>
+      <button class="btn btn-gold" style="width:100%;" onclick="fetchStats()">🔄 새로고침</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Leaderboard -->
+  <div class="panel">
+    <div class="panel-title">
+      🏆 실시간 순위표
+      <span class="live-dot" style="margin-left:6px;"></span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th style="width:50px;">순위</th>
+            <th>가정 이름</th>
+            <th>진행 상황</th>
+            <th style="text-align:right;">점수</th>
+          </tr>
+        </thead>
+        <tbody id="lbBody">
+          <tr><td colspan="4"><div class="empty-msg">데이터 로딩 중...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTOR OVERLAY -->
+<div class="projector-overlay" id="projector">
+  <button class="proj-close" onclick="hideProjector()">✕</button>
+  <div class="proj-header">
+    <div class="proj-cross">✝</div>
+    <div class="proj-title">오륜교회 성경 넌센스 퀴즈</div>
+    <div class="proj-sub">신혼부부 행복 축복 행사 🎉</div>
+    <div class="proj-gold"></div>
+  </div>
+  <div class="proj-list" id="projList"></div>
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-bg" id="resetModal">
+  <div class="modal">
+    <h3>🔄 점수 초기화</h3>
+    <p style="color:rgba(255,255,255,0.7);font-size:13px;margin-bottom:16px;">관리자 비밀번호를 입력하면 모든 점수와 참가자 데이터가 삭제됩니다.</p>
+    <input type="password" id="resetPwd" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doReset()">
+    <div class="modal-btns">
+      <button class="btn btn-red" onclick="doReset()" style="flex:1;">초기화 실행</button>
+      <button class="btn btn-outline" onclick="hideResetModal()" style="flex:1;">취소</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentLB = [];
+let sse = null;
+
+// ===== QR 생성 =====
+function makeQR() {
+  const url = window.location.origin;
+  document.getElementById('quizUrl').textContent = url;
+  new QRCode(document.getElementById('qr-container'), {
+    text: url, width: 200, height: 200,
+    colorDark: '#6B1A2E', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+function copyUrl() {
+  const url = window.location.origin;
+  navigator.clipboard.writeText(url).then(() => alert('주소가 복사되었습니다!\n' + url));
+}
+
+// ===== SSE =====
+function connectSSE() {
+  sse = new EventSource('/api/events');
+  sse.onmessage = e => {
+    const m = JSON.parse(e.data);
+    if (m.type === 'leaderboard') {
+      updateLB(m.data);
+      updateProjList(m.data);
+    }
+  };
+  sse.onopen = () => {
+    document.getElementById('liveStatus').textContent = '실시간 연결됨';
+  };
+  sse.onerror = () => {
+    document.getElementById('liveStatus').textContent = '재연결 중...';
+    sse.close(); sse = null;
+    setTimeout(connectSSE, 4000);
+  };
+}
+
+// ===== STATS =====
+async function fetchStats() {
+  try {
+    const r = await fetch('/api/admin/stats');
+    const d = await r.json();
+    document.getElementById('sTot').textContent  = d.totalFamilies;
+    document.getElementById('sDone').textContent = d.completedFamilies;
+    document.getElementById('sIn').textContent   = d.inProgressFamilies;
+    document.getElementById('sQ').textContent    = d.totalQuestions;
+    updateLB(d.leaderboard);
+    updateProjList(d.leaderboard);
+  } catch(e) {}
+}
+
+// ===== LEADERBOARD TABLE =====
+const MEDALS = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+
+function updateLB(data) {
+  currentLB = data;
+  const tbody = document.getElementById('lbBody');
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4"><div class="empty-msg">아직 참가 가정이 없습니다</div></td></tr>';
+    // Update stats
+    document.getElementById('sTot').textContent = 0;
+    document.getElementById('sDone').textContent = 0;
+    document.getElementById('sIn').textContent = 0;
+    return;
+  }
+
+  const completed = data.filter(f=>f.completed).length;
+  const inProg = data.filter(f=>!f.completed && f.progress>0).length;
+  document.getElementById('sTot').textContent  = data.length;
+  document.getElementById('sDone').textContent = completed;
+  document.getElementById('sIn').textContent   = inProg;
+
+  tbody.innerHTML = data.map((f,i) => `
+    <tr class="${i<5?'top-5':''}" data-name="${esc(f.name)}">
+      <td class="medal">${MEDALS[i]||i+1}</td>
+      <td class="name-cell">
+        ${esc(f.name)}
+        ${f.completed ? '<span class="badge-done">완료</span>' : '<span class="badge-prog">진행중</span>'}
+      </td>
+      <td class="prog-cell">${f.progress} / ${f.total}문제</td>
+      <td class="score-cell">${f.score}점</td>
+    </tr>
+  `).join('');
+
+  // Top5 names update
+  fetchStats();
+}
+
+// ===== PROJECTOR =====
+function updateProjList(data) {
+  const list = document.getElementById('projList');
+  if (!data || data.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);padding:40px;font-size:22px;">참가 가정을 기다리는 중...</div>';
+    return;
+  }
+  const show = data.slice(0, 8);
+  list.innerHTML = show.map((f,i) => `
+    <div class="proj-item ${i<5?'top':''}">
+      <div class="proj-rank">${MEDALS[i]||i+1}</div>
+      <div class="proj-name">${esc(f.name)} ${f.completed?'✅':''}</div>
+      <div>
+        <div class="proj-score">${f.score}</div>
+        <div class="proj-pts">점</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showProjector() {
+  document.getElementById('projector').classList.add('show');
+  updateProjList(currentLB);
+}
+function hideProjector() {
+  document.getElementById('projector').classList.remove('show');
+}
+
+// ===== RESET =====
+function showResetModal() { document.getElementById('resetModal').classList.add('show'); }
+function hideResetModal() { document.getElementById('resetModal').classList.remove('show'); document.getElementById('resetPwd').value=''; }
+
+async function doReset() {
+  const pwd = document.getElementById('resetPwd').value;
+  try {
+    const r = await fetch('/api/admin/reset', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: pwd})
+    });
+    const d = await r.json();
+    if (d.success) { alert('✅ 초기화 완료!'); hideResetModal(); fetchStats(); }
+    else alert('❌ ' + d.error);
+  } catch(e) { alert('오류가 발생했습니다'); }
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(s));
+  return d.innerHTML;
+}
+
+// ===== INIT =====
+makeQR();
+connectSSE();
+fetchStats();
+// 30초마다 자동 갱신
+setInterval(fetchStats, 30000);
+</script>
+</body>
+</html>
