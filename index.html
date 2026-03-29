@@ -127,12 +127,15 @@
     #s-quiz {
       display: none;
       position: fixed !important;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0; left: 0; right: 0;
+      height: 100vh;
+      height: 100dvh; /* 키보드 올라오면 자동으로 줄어듦 (최신폰) */
       padding: 0 !important;
       background: var(--cream);
       flex-direction: column;
       z-index: 100;
       max-width: 100%;
+      overflow: hidden;
     }
     #s-quiz.on {
       display: flex !important;
@@ -511,7 +514,7 @@ const ST = {
   score:   +sessionStorage.getItem('fsc')  || 0,
   ok:      +sessionStorage.getItem('fok')  || 0,
   msTotal: +sessionStorage.getItem('fms')  || 0,
-  total:   0,
+  total:   +sessionStorage.getItem('ftot') || 0,  // 복원 가능하게 저장
   tlMs:    30000,
   done:    sessionStorage.getItem('fdn') === '1'
 };
@@ -522,6 +525,7 @@ function save() {
   sessionStorage.setItem('fsc',  ST.score);
   sessionStorage.setItem('fok',  ST.ok);
   sessionStorage.setItem('fms',  ST.msTotal);
+  sessionStorage.setItem('ftot', ST.total);
   sessionStorage.setItem('fdn',  ST.done ? '1' : '0');
 }
 
@@ -585,12 +589,13 @@ async function doRegister() {
 /* ════════════════════════════════
    TIMER
 ════════════════════════════════ */
-let tmInt = null, tmStart = 0, tmDone = false;
+let tmInt = null, tmStart = 0, tmDone = false, submitted = false;
 
 function tmStart2(serverTs) {
   clearInterval(tmInt);
-  tmDone  = false;
-  tmStart = serverTs || Date.now();
+  tmDone    = false;
+  submitted = false;
+  tmStart   = serverTs || Date.now();
   tmInt   = setInterval(tmTick, 100);
   tmTick();
 }
@@ -621,6 +626,8 @@ function tmTick() {
 }
 
 function onTimeout() {
+  if (submitted) return;   // 이미 제출한 경우 타임아웃 중복 방지
+  submitted = true;
   lockInput();
   if (navigator.vibrate) navigator.vibrate([80,40,80]);
   sfxTmo();
@@ -680,24 +687,30 @@ async function loadQ(idx) {
 function lockInput() {
   document.getElementById('ansInput').disabled = true;
   document.getElementById('ansBtn').disabled   = true;
+  document.getElementById('ansRow').style.display = 'none'; // 제출 즉시 입력창 숨김
 }
 
-/* 다음 문제 버튼 — 클릭 핸들러 안에서 동기적 focus() (iOS 키보드) */
+/* 다음 문제 버튼 */
 function nextQ() {
   sfxNxt();
+  // iOS 키보드: 사용자 제스처 안에서 동기적으로 focus 먼저 호출
   const inp = document.getElementById('ansInput');
   inp.disabled = false;
   inp.value = '';
-  inp.focus(); // iOS: 반드시 user gesture 내 동기 호출
+  inp.focus();
+  // ansRow는 loadQ → resetUI 에서 표시됨 (이중 표시 방지)
   loadQ(ST.idx);
 }
 
 function doSubmit() {
+  if (submitted) return;          // 가장 먼저 플래그 확인
   const inp = document.getElementById('ansInput');
+  if (inp.disabled) return;       // 비활성화 상태면 차단
   const val = inp.value.trim();
-  if (!val || tmDone || inp.disabled) return;
-  lockInput();
+  if (!val) return;
+  submitted = true;               // 즉시 플래그 설정 (비동기 전에)
   tmStop();
+  lockInput();
   sendAns(val, false);
 }
 
@@ -759,7 +772,15 @@ async function sendAns(answer, isTimeout) {
       document.getElementById('feedback').scrollIntoView({behavior:'smooth', block:'nearest'});
     }, 100);
 
-  } catch(e) { console.error(e); }
+  } catch(e) {
+    console.error('sendAns 오류:', e);
+    // 네트워크 오류 시 submitted 리셋 → 다시 제출 가능하게
+    submitted = false;
+    document.getElementById('ansRow').style.display = 'flex';
+    document.getElementById('ansInput').disabled = false;
+    document.getElementById('ansBtn').disabled = false;
+    alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+  }
 }
 
 function finishQuiz() {
@@ -900,6 +921,18 @@ function init() {
 
   // iOS AudioContext 활성화
   document.addEventListener('touchstart', ()=>{try{if(AC)AC.resume();}catch(e){}},{once:true,passive:true});
+
+  // 키보드 올라올 때 퀴즈 화면 높이 조정 (구형폰 fallback)
+  if (window.visualViewport) {
+    const quiz = document.getElementById('s-quiz');
+    const onVVResize = () => {
+      const vv = window.visualViewport;
+      quiz.style.height = vv.height + 'px';
+      quiz.style.top    = vv.offsetTop + 'px';
+    };
+    window.visualViewport.addEventListener('resize', onVVResize);
+    window.visualViewport.addEventListener('scroll', onVVResize);
+  }
 }
 
 init();
