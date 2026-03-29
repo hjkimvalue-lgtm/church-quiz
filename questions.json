@@ -1,80 +1,338 @@
 [
   {
     "id": 1,
-    "question": "노아가 방주를 만들 때 쓴 나무 이름은?",
-    "answer": "고페르",
-    "altAnswers": ["고페르나무", "고페르 나무"],
-    "explanation": "창6:14 — 하나님께서 '고페르 나무로 방주를 만들라' 하셨습니다",
-    "hint": "창세기 6장에 나옵니다"
+    "question": "최고의 예언자는?",
+    "answer": "미리암",
+    "altAnswers": [],
+    "explanation": "미리 암 → 미리(먼저/앞서) 말하는 사람이 예언자!"
   },
   {
     "id": 2,
-    "question": "삼손의 힘의 비밀은 무엇이었나요?",
-    "answer": "머리카락",
-    "altAnswers": ["머리털", "머리", "긴 머리"],
-    "explanation": "사사기 16:17 — 머리를 밀면 하나님의 힘이 떠난다고 했습니다"
+    "question": "가장 힙한 사람은?",
+    "answer": "욥",
+    "altAnswers": ["yop", "YOP"],
+    "explanation": "Y.O.P! 욥 (Yob) — 가장 힙하다~"
   },
   {
     "id": 3,
-    "question": "요나가 물고기 배 속에 있었던 기간은?",
-    "answer": "삼일삼야",
-    "altAnswers": ["3일 3야", "3일", "사흘", "3일3야", "삼일"],
-    "explanation": "요나 1:17 — 물고기 배 속에 삼 일 삼 야를 있었습니다"
+    "question": "딸이 가장 많이 있는 동네는?",
+    "answer": "막달라",
+    "altAnswers": ["막달라 마리아"],
+    "explanation": "막달라 → 막(많은) 달(딸)라!"
   },
   {
     "id": 4,
-    "question": "예수님의 첫 번째 기적이 일어난 곳은?",
-    "answer": "가나",
-    "altAnswers": ["갈릴리 가나", "가나 혼인잔치"],
-    "explanation": "요한복음 2:1~11 — 갈릴리 가나에서 물을 포도주로 바꾸셨습니다"
+    "question": "이 분 앞에서는 비밀을 잘 지켜야 해요?",
+    "answer": "들릴라",
+    "altAnswers": ["드릴라", "델릴라"],
+    "explanation": "들릴라 → 다 들릴라(들릴까봐)! 삼손의 비밀을 빼앗은 여인"
   },
   {
     "id": 5,
-    "question": "솔로몬 왕이 하나님께 구한 것은?",
-    "answer": "지혜",
-    "altAnswers": ["지혜로운 마음", "듣는 마음"],
-    "explanation": "열왕기상 3:9 — 솔로몬은 선악을 분별하는 지혜를 구했습니다"
+    "question": "아기를 낳기 원하는 여자가 가야 할 여행지는?",
+    "answer": "에베소",
+    "altAnswers": [],
+    "explanation": "에베소 → 에(어) 베소(배소)? 배 속에 아기가!"
   },
   {
     "id": 6,
-    "question": "성경에서 가장 짧은 구절 '예수께서 ○○을 흘리시더라' — 빈칸은?",
-    "answer": "눈물",
+    "question": "에베소를 방문한 후에 필수적으로 가봐야 하는 곳은?",
+    "answer": "아가야",
     "altAnswers": [],
-    "explanation": "요한복음 11:35 — '예수께서 눈물을 흘리시더라'는 성경에서 가장 짧은 구절입니다"
+    "explanation": "아가야 → 아가(아기)야! 아기 낳고 나서 가는 곳"
   },
   {
     "id": 7,
-    "question": "다윗이 골리앗을 쓰러뜨린 무기는?",
-    "answer": "물맷돌",
-    "altAnswers": ["돌", "물매", "물매와 돌", "새총"],
-    "explanation": "사무엘상 17:50 — 물매와 돌 하나로 골리앗을 이겼습니다"
+    "question": "골리앗이 농구를 하면 포지션은?",
+    "answer": "가드",
+    "altAnswers": ["골리앗 고향", "가드 (골리앗 고향)"],
+    "explanation": "골리앗의 고향이 '가드'! 농구에서 가드 포지션"
   },
   {
     "id": 8,
-    "question": "모세가 홍해를 건넌 뒤 광야에서 먹은 하늘의 양식 이름은?",
-    "answer": "만나",
-    "altAnswers": ["만나와 메추라기"],
-    "explanation": "출애굽기 16:31 — 그 이름을 만나라 했고 흰 떡 같았습니다"
+    "question": "인류 최초의 동물원은?",
+    "answer": "노아의 방주",
+    "altAnswers": ["방주", "노아방주"],
+    "explanation": "온갖 동물을 다 모아놓은 노아의 방주!"
   },
   {
     "id": 9,
-    "question": "예수님이 오병이어로 먹이신 남자의 수는?",
-    "answer": "오천명",
-    "altAnswers": ["5000명", "5천명", "5,000명"],
-    "explanation": "마태복음 14:21 — 남자만 오천 명이었고 여자와 아이들은 별도였습니다"
+    "question": "새 두 마리를 두 글자로 표현하면?",
+    "answer": "이새",
+    "altAnswers": ["이 새"],
+    "explanation": "이(2) + 새 = 이새! 다윗의 아버지 이름이기도 하죠"
   },
   {
     "id": 10,
-    "question": "룻의 시어머니 이름은?",
-    "answer": "나오미",
+    "question": "하나님이 제일 싫어하는 비는?",
+    "answer": "사이비",
     "altAnswers": [],
-    "explanation": "룻기 1:2~3 — 나오미가 룻의 시어머니로 함께 베들레헴으로 돌아왔습니다"
+    "explanation": "사이비(似而非) — 거짓 종교, 하나님이 가장 싫어하시죠!"
   },
   {
     "id": 11,
-    "question": "👉 이 문제부터 집사님이 직접 입력해 주세요! (샘플 문제입니다)",
-    "answer": "정답을여기",
-    "altAnswers": ["정답 여기", "여기"],
-    "explanation": "questions.json 파일에서 이 문제를 실제 넌센스 문제로 교체해주세요"
+    "question": "옷을 가장 잘 입은 성경 인물은?",
+    "answer": "입다",
+    "altAnswers": [],
+    "explanation": "입다 → 옷을 입다! 사사기의 인물 입다"
+  },
+  {
+    "id": 12,
+    "question": "역도 선수들이 좋아하는 탑은?",
+    "answer": "바벨탑",
+    "altAnswers": ["바벨"],
+    "explanation": "바벨탑 → 바(bar)벨! 역도의 바벨과 바벨탑"
+  },
+  {
+    "id": 13,
+    "question": "뜨겁지는 않지만 따가운 불은?",
+    "answer": "가시덤불",
+    "altAnswers": ["가시덤불 불", "떨기나무"],
+    "explanation": "가시덤불 → 따갑지만 타지 않는 모세의 가시덤불 불꽃!"
+  },
+  {
+    "id": 14,
+    "question": "성경 인물 중 늘 자신을 봐 주기를 원하는 사람은?",
+    "answer": "바라바",
+    "altAnswers": [],
+    "explanation": "바라바 → 바라봐(바라바)! 늘 봐주길 바라는 사람"
+  },
+  {
+    "id": 15,
+    "question": "보통 사람보다 손이 하나 더 있는 성경 인물은?",
+    "answer": "삼손",
+    "altAnswers": [],
+    "explanation": "삼손 → 삼(3)손! 보통 사람은 두 손, 삼손은 세 손?"
+  },
+  {
+    "id": 16,
+    "question": "가정 주부와 가장 친한 성경 인물은?",
+    "answer": "도마",
+    "altAnswers": [],
+    "explanation": "도마 → 주방의 도마(cutting board)! 주부의 필수품"
+  },
+  {
+    "id": 17,
+    "question": "성경 인물 중 장사를 제일 잘하는 사람은?",
+    "answer": "사라",
+    "altAnswers": [],
+    "explanation": "사라 → 사(사세요)라(라고 외치는)! 장사꾼 사라"
+  },
+  {
+    "id": 18,
+    "question": "출전한 선수 모두가 기도를 드리고 시작하는 운동경기는?",
+    "answer": "합기도",
+    "altAnswers": ["합기도(합+기도)"],
+    "explanation": "합기도 → 합(합심하여) + 기도! 모두 기도하고 시작"
+  },
+  {
+    "id": 19,
+    "question": "세계의 만병 통치약은?",
+    "answer": "신약과 구약",
+    "altAnswers": ["신약", "구약", "성경"],
+    "explanation": "신약(新藥=새 약)과 구약(舊藥=옛 약) — 성경이 만병통치약!"
+  },
+  {
+    "id": 20,
+    "question": "하나님이 사무를 보는 것을 다른 말로 표현하면?",
+    "answer": "사무엘",
+    "altAnswers": [],
+    "explanation": "사무엘 → 사무(事務)를 엘(하나님이) 보심! 사무엘"
+  },
+  {
+    "id": 21,
+    "question": "성경에서 수학을 제일 잘 할 것 같은 인물은?",
+    "answer": "셈",
+    "altAnswers": [],
+    "explanation": "셈 → 셈(계산)을 잘하는 사람! 노아의 아들 셈"
+  },
+  {
+    "id": 22,
+    "question": "하나님이 가장 사랑하시는 개는 무엇인가?",
+    "answer": "회개",
+    "altAnswers": [],
+    "explanation": "회개 → 회(돌아오는) 개! 하나님은 회개를 가장 기뻐하십니다"
+  },
+  {
+    "id": 23,
+    "question": "천국에는 없는 상의 이름은 무엇인가?",
+    "answer": "우상",
+    "altAnswers": [],
+    "explanation": "우상 → 천국에는 우상(偶像)이 없죠! 1등만 있고 2등(우상?)은 없다는 뜻도"
+  },
+  {
+    "id": 24,
+    "question": "세계에서 가장 오랫동안 잠수기록 보유자인 성경인물은?",
+    "answer": "요나",
+    "altAnswers": [],
+    "explanation": "요나 → 큰 물고기 배 속에서 3일 3야! 세계 최장 잠수 기록"
+  },
+  {
+    "id": 25,
+    "question": "성경에서 가장 나이가 어린 왕은?",
+    "answer": "느부갓네살",
+    "altAnswers": ["느부갓 네 살", "느부갓네살왕", "느브갓네살"],
+    "explanation": "느부갓'네 살'왕 → 네 살짜리 왕! 느부갓네살(네 살)"
+  },
+  {
+    "id": 26,
+    "question": "성경에서 가장 빨리 왕이 된 사람은?",
+    "answer": "바로왕",
+    "altAnswers": ["바로", "파라오"],
+    "explanation": "바로왕 → 바로(즉시) 왕이 됨! 이집트의 파라오 바로왕"
+  },
+  {
+    "id": 27,
+    "question": "가장 달콤한 국은 무엇일까?",
+    "answer": "천국",
+    "altAnswers": [],
+    "explanation": "천국 → 천(달콤한 하늘)국! 가장 달콤한 곳"
+  },
+  {
+    "id": 28,
+    "question": "성경에서 발렌타인데이에 가장 인기 있는 동네는?",
+    "answer": "가나",
+    "altAnswers": ["갈릴리 가나", "가나 혼인잔치"],
+    "explanation": "가나 → 가나(사랑 고백할 때 '가나요?')! 혼인잔치가 열린 곳"
+  },
+  {
+    "id": 29,
+    "question": "성경 속 인물 중에서 다리가 가장 많은 사람은 누구일까?",
+    "answer": "다리오",
+    "altAnswers": [],
+    "explanation": "다리오 → 다리(legs)가 오(5)개! 다리우스 왕 다리오"
+  },
+  {
+    "id": 30,
+    "question": "인류 최초로 하늘을 날은 성경인물은?",
+    "answer": "에녹",
+    "altAnswers": [],
+    "explanation": "에녹 → 죽지 않고 하나님이 데려가심(창5:24). 승천한 첫 인물!"
+  },
+  {
+    "id": 31,
+    "question": "부모님께 잘 못했을 때 읽어야 하는 성경은?",
+    "answer": "빌립보서",
+    "altAnswers": ["빌립보"],
+    "explanation": "빌립보서 → 빌(빌어야지) + 립(입술로) + 보서(봐서)! 빌어야 할 때"
+  },
+  {
+    "id": 32,
+    "question": "하나님이 노아에게 주신 개 이름은?",
+    "answer": "무지개",
+    "altAnswers": [],
+    "explanation": "무지개 → 무지(無知)한 개? 아니면 무지개(rainbow)! 언약의 무지개"
+  },
+  {
+    "id": 33,
+    "question": "많기도 하고 적기도 한 도시의 이름은?",
+    "answer": "다소",
+    "altAnswers": [],
+    "explanation": "다소(多少) → 많다(多)와 적다(少)! 바울의 고향 다소(Tarsus)"
+  },
+  {
+    "id": 34,
+    "question": "세계 최초 부실 공사한 성은?",
+    "answer": "여리고성",
+    "altAnswers": ["여리고", "여리고 성"],
+    "explanation": "여리고성 → 나팔 소리에 와르르 무너진 여리고 성! 부실 공사의 원조"
+  },
+  {
+    "id": 35,
+    "question": "예수님이 좋아하는 운동은?",
+    "answer": "크로스핏",
+    "altAnswers": ["크로스 핏", "crossfit"],
+    "explanation": "크로스핏 → 십자가(Cross) + 핏(fit)! 예수님의 십자가"
+  },
+  {
+    "id": 36,
+    "question": "세상에서 가장 뜨거운 과일은?",
+    "answer": "천도복숭아",
+    "altAnswers": ["천도 복숭아"],
+    "explanation": "천도복숭아 → 천도(千度=천 도)! 온도가 천 도나 되는 뜨거운 과일"
+  },
+  {
+    "id": 37,
+    "question": "도둑이 가장 좋아하는 아이스크림은?",
+    "answer": "보석바",
+    "altAnswers": [],
+    "explanation": "보석바 → 도둑은 보석을 훔치죠! 보석바 아이스크림"
+  },
+  {
+    "id": 38,
+    "question": "왕이 넘어지면?",
+    "answer": "킹콩",
+    "altAnswers": ["킹 콩"],
+    "explanation": "킹(King)이 콩(쿵) 하고 넘어지면 → 킹콩!"
+  },
+  {
+    "id": 39,
+    "question": "자동차를 톡 치면 나는 소리는?",
+    "answer": "카톡",
+    "altAnswers": ["카 톡"],
+    "explanation": "자동차(카)를 톡 치면 → 카톡! 국민 메신저"
+  },
+  {
+    "id": 40,
+    "question": "세상에서 가장 지루한 중학교는?",
+    "answer": "로딩중",
+    "altAnswers": ["로딩 중", "로딩중학교"],
+    "explanation": "로딩중(로딩 중)학교 → 기다리고 기다려도 끝이 없는 로딩 중!"
+  },
+  {
+    "id": 41,
+    "question": "세상에서 가장 빠른 닭은?",
+    "answer": "후다닥",
+    "altAnswers": [],
+    "explanation": "후다닥 → 닭이 후다닥 뛰어가면 가장 빠른 닭!"
+  },
+  {
+    "id": 42,
+    "question": "세상에서 가장 무서운 비는?",
+    "answer": "사이비",
+    "altAnswers": [],
+    "explanation": "사이비(似而非) → 진짜인 척하는 가짜! 가장 무서운 비"
+  },
+  {
+    "id": 43,
+    "question": "세상에서 가장 비싼 새는?",
+    "answer": "백조",
+    "altAnswers": [],
+    "explanation": "백조(百兆) → 백 조(100조) 원짜리 새! 발레 백조의 호수도 비싸죠"
+  },
+  {
+    "id": 44,
+    "question": "세상에서 가장 착한 사자는?",
+    "answer": "자원봉사자",
+    "altAnswers": ["봉사자", "자원봉사"],
+    "explanation": "자원봉사자 → 자원봉사'자'! 스스로 봉사하는 착한 사람"
+  },
+  {
+    "id": 45,
+    "question": "세상에서 가장 가난한 왕은?",
+    "answer": "최저임금",
+    "altAnswers": ["최저 임금"],
+    "explanation": "최저임금 → 최저(最低)임금의 임(임금)! 가장 낮은 임금을 받는 왕"
+  },
+  {
+    "id": 46,
+    "question": "개가 사람을 가르치면?",
+    "answer": "개인지도",
+    "altAnswers": ["개인 지도"],
+    "explanation": "개인지도 → 개(犬)가 인(人)을 지도(指導)하면 개인지도!"
+  },
+  {
+    "id": 47,
+    "question": "비가 자기소개하면?",
+    "answer": "나비야",
+    "altAnswers": ["나 비야"],
+    "explanation": "나 비야 → 나(저는) 비(rain)야! 자기소개 완료"
+  },
+  {
+    "id": 48,
+    "question": "세상에서 가장 나쁜 물고기는?",
+    "answer": "악어",
+    "altAnswers": ["악 어"],
+    "explanation": "악어 → 악(惡)한 어(魚=물고기)! 악어는 사실 파충류지만..."
   }
 ]
